@@ -1,0 +1,25 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t michaelshone/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true michaelshone/react-test npm test
+
+after_success:
+  - docker build -t michaelshone/multi-client ./client
+  - docker build -t michaelshone/multi-nginx ./nginx
+  - docker build -t michaelshone/multi-server ./server
+  - docker build -t michaelshone/multi-worker ./worker
+  
+  # Login to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+  # push rhose images to docker hub
+  - docker push michaelshone/multi-client
+  - docker push michaelshone/multi-nginx
+  - docker push michaelshone/multi-server
+  - docker pusj michaelshone/multi-worker
