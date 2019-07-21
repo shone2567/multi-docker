@@ -22,4 +22,4 @@ after_success:
   - docker push michaelshone/multi-client
   - docker push michaelshone/multi-nginx
   - docker push michaelshone/multi-server
-  - docker pusj michaelshone/multi-worker
+  - docker push michaelshone/multi-worker
